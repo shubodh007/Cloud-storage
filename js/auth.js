@@ -63,7 +63,7 @@ async function init() {
       if (!password.value) { fieldError(password, "Please enter your password."); bad = true; }
       if (bad) return;
       const sb = getClient();
-      if (!sb) { showFormError(loginForm, "Supabase is not configured yet. Copy js/supabase-config.example.js to js/supabase-config.js and add your keys."); return; }
+      if (!sb) { showFormError(loginForm, "Supabase is not configured yet. Run `npm run build` with SUPABASE_URL + SUPABASE_ANON_KEY set (see README)."); return; }
       setLoading(loginForm, true, "Logging in…");
       try {
         const { error } = await sb.auth.signInWithPassword({ email: email.value.trim(), password: password.value });
@@ -92,7 +92,7 @@ async function init() {
       if (password.value.length < 6) { fieldError(password, "Password must be at least 6 characters."); bad = true; }
       if (bad) return;
       const sb = getClient();
-      if (!sb) { showFormError(regForm, "Supabase is not configured yet. Copy js/supabase-config.example.js to js/supabase-config.js and add your keys."); return; }
+      if (!sb) { showFormError(regForm, "Supabase is not configured yet. Run `npm run build` with SUPABASE_URL + SUPABASE_ANON_KEY set (see README)."); return; }
       setLoading(regForm, true, "Creating account…");
       try {
         const { error } = await sb.auth.signUp({

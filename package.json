@@ -1,0 +1,10 @@
+{
+  "name": "cloudbox",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CloudBox — vanilla HTML/CSS/JS file storage on Supabase (no framework, no backend). Node is a build-time tool only.",
+  "scripts": {
+    "build": "node scripts/generate-config.js",
+    "dev": "npm run build && npx serve ."
+  }
+}

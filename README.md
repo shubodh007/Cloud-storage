@@ -49,21 +49,55 @@ Private bucket `user-files`: `8e1f…/169…-resume.pdf`. Frontend never guesses
 
 ## Environment variables
 
-`.env` is the single source of truth. It is gitignored and never pushed to git.
-The static frontend cannot read `.env` at runtime (no build step), so sync it
-into the gitignored runtime config the app actually loads:
+Only two variables exist, both client-safe:
+
+| Variable | Value |
+|---|---|
+| `SUPABASE_URL` | `https://YOUR-PROJECT.supabase.co` |
+| `SUPABASE_ANON_KEY` | anon/publishable key (never `service_role`, never a secret) |
+
+`.env` (local) and Vercel Environment Variables (deployed) are the only inputs.
+The static frontend cannot read `.env` at runtime, so `npm run build`
+(`scripts/generate-config.js`, Node built-ins only) validates both values and
+generates the gitignored runtime config the app actually loads
+(`js/supabase-config.js` → `window.CLOUDBOX_CONFIG`). The build **fails** if a
+variable is missing or still a placeholder — it never writes an invalid config,
+never prints the key, and refuses non-`anon` JWT roles.
+
+Safe to commit: `.env.example`, `js/supabase-config.example.js` (placeholders only).
+Never committed: `.env`, `js/supabase-config.js` (both in `.gitignore`).
+
+The anon/publishable key is public client-side configuration, not a secret.
+Real security stays in Supabase Auth + PostgreSQL RLS + Storage RLS.
+`service_role` must never appear in the frontend, `.env.example`, or any build output.
+
+## Local setup
 
 ```powershell
 Copy-Item .env.example .env
 # edit SUPABASE_URL + SUPABASE_ANON_KEY inside .env, then:
-powershell -ExecutionPolicy Bypass -File .\sync-config.ps1
+npm run build
 npx serve .
+# open http://localhost:3000  (index, login, register, dashboard)
 ```
 
-Safe to commit: `.env.example`, `js/supabase-config.example.js` (placeholders only).
-Never committed: `.env`, `js/supabase-config.js` (both in `.gitignore`).
-Deploying elsewhere later? Recreate the same two values as env/config on the host —
-never copy a real key into a committed file.
+(`sync-config.ps1` still works as a local alternative; `npm run build` is the
+canonical cross-platform path and the one Vercel uses.)
+
+Without Supabase configured, pages load with a setup banner and no fake data.
+
+## Vercel setup
+
+1. Import the GitHub repository into Vercel.
+2. Vercel → Project → Settings → Environment Variables — add for
+   Production (and Preview/Development as needed):
+   - `SUPABASE_URL`
+   - `SUPABASE_ANON_KEY` (anon/publishable key only — never `service_role`)
+3. Build Command: `npm run build` (already set in `vercel.json`).
+4. Deploy. The build generates `js/supabase-config.js` inside the deployment output —
+   no serverless function, no backend, no `process.env` in browser code.
+
+Changing a Vercel environment variable requires a redeploy (new deployment) to take effect.
 
 ## Supabase setup (manual, ~5 min)
 
@@ -75,6 +109,7 @@ never copy a real key into a committed file.
 ## Local run
 
 ```powershell
+npm run build
 npx serve .
 # open http://localhost:3000  (index, login, register, dashboard)
 ```

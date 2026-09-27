@@ -3,13 +3,24 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 let client = null;
+let warnedMissing = false;
 
 export function getConfig() {
-  const c = window.CLOUDBOX_CONFIG || {};
-  const url = (c.SUPABASE_URL || "").trim();
-  const key = (c.SUPABASE_ANON_KEY || "").trim();
+  // Defensive: supabase-config.js may be absent (not built yet) — never crash,
+  // callers fall back to the setup/not-configured UI via isConfigured().
+  const c = (typeof window !== "undefined" && window.CLOUDBOX_CONFIG) || {};
+  const url = String(c.SUPABASE_URL || "").trim();
+  const key = String(c.SUPABASE_ANON_KEY || "").trim();
   const looksPlaceholder = !url || !key || url.includes("YOUR-PROJECT") || key.includes("YOUR-ANON");
-  return { url, key, configured: !looksPlaceholder && url.startsWith("https://") };
+  const configured = !looksPlaceholder && url.startsWith("https://");
+  if (!configured && !warnedMissing && typeof console !== "undefined") {
+    warnedMissing = true;
+    console.warn(
+      "CloudBox: Supabase is not configured (missing js/supabase-config.js or placeholder values). " +
+        "Run `npm run build` with SUPABASE_URL + SUPABASE_ANON_KEY set. Showing setup state."
+    );
+  }
+  return { url, key, configured };
 }
 
 export function isConfigured() {
