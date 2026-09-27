@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — CloudBox</title>
+  <meta name="description" content="CloudBox dashboard: upload, search, download and delete your cloud files.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%232563EB'/%3E%3Cpath d='M7 15a3.5 3.5 0 01-.6-6.95A5 5 0 0116.2 9.6 3.2 3.2 0 0116.5 16H7z' fill='white'/%3E%3C/svg%3E">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Sidebar">
+      <div class="side-brand">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M7 18a4 4 0 01-.7-7.94A5.5 5.5 0 0117.2 11.4 3.6 3.6 0 0117.5 18.5H7z"/></svg></span>
+        CloudBox
+      </div>
+      <nav class="side-nav" aria-label="Dashboard">
+        <a class="side-link active" href="dashboard.html" aria-current="page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          Dashboard
+        </a>
+        <a class="side-link" href="dashboard.html#files" data-nav="files">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          My Files
+        </a>
+        <a class="side-link" href="dashboard.html#trash" data-nav="trash">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m-9 0l1 13h10l1-13"/></svg>
+          Trash
+          <span class="count" id="trash-count" hidden>0</span>
+        </a>
+      </nav>
+      <div class="side-section">Storage</div>
+      <div class="side-storage" role="status" aria-label="Storage usage">
+        <h3>Cloud Storage</h3>
+        <div class="nums"><span id="usage-used"><strong>0 B</strong> used of 1 GB</span></div>
+        <div class="progress" role="progressbar" aria-label="Storage used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+          <i id="usage-bar" style="width:0%"></i>
+        </div>
+        <div class="nums" style="margin-top:6px"><span id="usage-avail">1 GB available</span></div>
+        <div class="segbar" id="usage-segments" aria-hidden="true"></div>
+        <ul class="usage-legend" id="usage-legend"></ul>
+      </div>
+      <div class="side-foot">
+        <button class="side-link" data-logout type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H6a2 2 0 01-2-2V5a2 2 0 012-2h3m7 14l4-4-4-4m4 4H9"/></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn mobile-nav-btn" id="nav-toggle" aria-label="Open navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+        <div>
+          <h1 id="hello">Hello</h1>
+          <span class="crumb">Your files, synced through the cloud</span>
+        </div>
+        <div class="topbar-spacer"></div>
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <label class="sr-only" for="search">Search files</label>
+          <input class="search-input" id="search" type="search" placeholder="Search files..." autocomplete="off">
+        </div>
+        <button class="btn btn-primary btn-sm" id="upload-btn" type="button">+ Upload File</button>
+      </header>
+
+      <main class="content">
+        <div class="config-banner" role="status">Supabase isn’t connected yet. Copy <code>js/supabase-config.example.js</code> → <code>js/supabase-config.js</code>, add your keys, then run the SQL in <code>supabase-setup.sql</code>. See README.</div>
+
+        <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload files: browse or drag and drop">
+          <p><strong>Drag &amp; drop files here</strong> or <button class="btn btn-secondary btn-sm" id="browse-btn" type="button">Browse files</button></p>
+          <p class="hint">PDF · DOCX · TXT · JPG · PNG · ZIP — up to 50 MB each</p>
+          <input type="file" id="file-input" class="sr-only" multiple accept=".pdf,.docx,.txt,.jpg,.jpeg,.png,.zip">
+        </div>
+        <section class="panel" id="upload-queue" aria-label="Uploads" hidden>
+          <div class="panel-head">
+            <h2>Uploads</h2>
+            <span class="spacer"></span>
+            <button class="icon-btn" id="queue-clear" type="button" hidden>Clear finished</button>
+          </div>
+          <div id="upload-list" aria-live="polite"></div>
+        </section>
+
+        <section class="panel" id="recent-panel" aria-label="Recent files">
+          <div class="panel-head">
+            <h2>Recent Files</h2>
+            <span class="spacer"></span>
+          </div>
+          <div id="recent-list"></div>
+          <div class="state-block slim" id="recent-empty" hidden>
+            <h3>No recent files</h3>
+            <p>Upload your first file to get started.</p>
+          </div>
+        </section>
+
+        <nav class="breadcrumbs" id="breadcrumbs" aria-label="Breadcrumb"></nav>
+
+        <section class="panel" id="files" aria-label="My files">
+          <div class="panel-head">
+            <h2 id="panel-title">My Files</h2>
+            <span class="count" id="file-count">0 files</span>
+            <span class="spacer"></span>
+            <button class="btn btn-secondary btn-sm" id="new-folder-btn" type="button">+ New Folder</button>
+            <button class="btn btn-secondary btn-sm" id="empty-trash-btn" type="button" hidden>Empty Trash</button>
+            <div class="view-toggle" id="view-toggle" role="group" aria-label="View mode">
+              <button type="button" data-view="list" aria-pressed="true">List</button>
+              <button type="button" data-view="grid" aria-pressed="false">Grid</button>
+            </div>
+          </div>
+          <div class="file-controls">
+            <div class="chip-row" id="type-filters" role="group" aria-label="Filter by type">
+              <button type="button" data-filter="all" class="active" aria-pressed="true">All</button>
+              <button type="button" data-filter="pdf" aria-pressed="false">PDF</button>
+              <button type="button" data-filter="image" aria-pressed="false">Images</button>
+              <button type="button" data-filter="document" aria-pressed="false">Documents</button>
+              <button type="button" data-filter="text" aria-pressed="false">Text</button>
+              <button type="button" data-filter="archive" aria-pressed="false">Archives</button>
+            </div>
+            <label class="sort-wrap">Sort
+              <select class="input sort-select" id="sort-select" aria-label="Sort files"></select>
+            </label>
+          </div>
+
+          <div id="files-loading" hidden>
+            <div class="skeleton-row"><div class="skel" style="width:32%"></div><div class="skel" style="width:14%"></div><div class="skel" style="width:18%"></div></div>
+            <div class="skeleton-row"><div class="skel" style="width:28%"></div><div class="skel" style="width:12%"></div><div class="skel" style="width:16%"></div></div>
+            <p class="form-note" style="padding:12px 16px">Loading files…</p>
+          </div>
+
+          <div class="state-block" id="files-empty" hidden>
+            <div class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+            <h3>No files yet</h3>
+            <p>Upload your first file to get started.</p>
+            <button class="btn btn-primary btn-sm" id="empty-upload-btn" type="button">Upload File</button>
+          </div>
+
+          <div class="state-block" id="files-error" hidden>
+            <h3>Couldn’t load files</h3>
+            <p id="files-error-msg">Something went wrong.</p>
+            <button class="btn btn-secondary btn-sm" id="retry-btn" type="button">Try again</button>
+          </div>
+
+          <div class="state-block" id="files-noresults" hidden>
+            <h3>No files found</h3>
+            <p>Try a different filename.</p>
+          </div>
+
+          <div class="bulk-bar" id="bulk-bar" hidden>
+            <span id="bulk-count" role="status">0 selected</span>
+            <span class="spacer"></span>
+            <button class="icon-btn" id="bulk-download" type="button">Download</button>
+            <button class="icon-btn" id="bulk-move" type="button">Move</button>
+            <button class="icon-btn danger" id="bulk-delete" type="button">Delete</button>
+            <button class="icon-btn" id="bulk-clear" type="button">Clear</button>
+          </div>
+          <div class="file-table-wrap" id="files-table-wrap">
+            <table class="file-table" id="files-table">
+              <thead><tr><th scope="col"><input type="checkbox" id="select-all" aria-label="Select all visible files"></th><th scope="col">Name</th><th scope="col">Size</th><th scope="col">Modified</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+              <tbody id="files-tbody"></tbody>
+            </table>
+          </div>
+          <div class="mobile-list" id="mobile-list"></div>
+          <div class="files-grid" id="files-grid"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <div class="drawer" id="drawer" aria-label="Mobile navigation">
+    <div class="side-brand"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M7 18a4 4 0 01-.7-7.94A5.5 5.5 0 0117.2 11.4 3.6 3.6 0 0117.5 18.5H7z"/></svg></span>CloudBox</div>
+    <a class="side-link" href="dashboard.html">Dashboard</a>
+    <a class="side-link" href="dashboard.html#files" data-nav="files">My Files</a>
+    <a class="side-link" href="dashboard.html#trash" data-nav="trash">Trash</a>
+    <button class="side-link" data-logout type="button">Logout</button>
+    <button class="btn btn-primary btn-sm" id="upload-btn-mobile" type="button" style="margin:12px 8px">+ Upload File</button>
+  </div>
+
+  <div class="modal-backdrop" id="folder-modal" role="dialog" aria-modal="true" aria-labelledby="folder-title">
+    <div class="modal">
+      <h2 id="folder-title">New folder</h2>
+      <form id="folder-form" novalidate>
+        <div class="form-error" role="alert" aria-live="assertive"></div>
+        <div class="field">
+          <label for="folder-name">Folder name</label>
+          <input class="input" id="folder-name" name="name" type="text" maxlength="80" autocomplete="off" placeholder="e.g. College" aria-describedby="folder-name-err" required>
+          <div class="field-error" id="folder-name-err" aria-live="polite"></div>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="folder-cancel" type="button">Cancel</button>
+          <button class="btn btn-primary" id="folder-confirm" type="submit">Create folder</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="rename-modal" role="dialog" aria-modal="true" aria-labelledby="rename-title">
+    <div class="modal">
+      <h2 id="rename-title">Rename file</h2>
+      <form id="rename-form" novalidate>
+        <div class="form-error" role="alert" aria-live="assertive"></div>
+        <div class="field">
+          <label for="rename-input">New name</label>
+          <input class="input" id="rename-input" name="name" type="text" maxlength="180" autocomplete="off" aria-describedby="rename-err" required>
+          <div class="field-error" id="rename-err" aria-live="polite"></div>
+        </div>
+        <p class="form-note" id="rename-ext-note" hidden>Extension will change — the file type label updates to match.</p>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="rename-cancel" type="button">Cancel</button>
+          <button class="btn btn-primary" id="rename-confirm" type="submit">Rename</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="move-modal" role="dialog" aria-modal="true" aria-labelledby="move-title">
+    <div class="modal">
+      <h2 id="move-title">Move</h2>
+      <p class="form-note" id="move-sub">Choose a destination folder.</p>
+      <div class="form-error" role="alert" aria-live="assertive"></div>
+      <div class="folder-picker" id="folder-picker" role="radiogroup" aria-label="Destination folder"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="move-cancel" type="button">Cancel</button>
+        <button class="btn btn-primary" id="move-confirm" type="button">Move</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-title">
+    <div class="modal">
+      <h2 id="delete-title">Delete file?</h2>
+      <p>Are you sure you want to delete <strong id="delete-name">this file</strong>?</p>
+      <p>This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="delete-cancel" type="button">Cancel</button>
+        <button class="btn btn-danger" id="delete-confirm" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop preview-backdrop" id="preview-modal" role="dialog" aria-modal="true" aria-labelledby="preview-title">
+    <div class="modal preview-modal">
+      <div class="preview-head">
+        <div class="preview-titles">
+          <h2 id="preview-title">File</h2>
+          <p id="preview-meta"></p>
+        </div>
+        <button class="icon-btn" id="preview-close-x" type="button" aria-label="Close preview">✕</button>
+      </div>
+      <div class="preview-body" id="preview-body"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="preview-download-btn" type="button">Download</button>
+        <button class="btn btn-secondary" id="preview-close-btn" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="drawer-backdrop" id="details-backdrop"></div>
+  <aside class="details-drawer" id="details-drawer" role="dialog" aria-modal="true" aria-labelledby="details-name" aria-hidden="true">
+    <div class="details-head">
+      <h2>File Details</h2>
+      <button class="icon-btn" id="details-close" type="button" aria-label="Close details">✕</button>
+    </div>
+    <div class="details-id">
+      <span class="ftype-icon details-icon" id="details-icon" aria-hidden="true">FILE</span>
+      <div><div class="details-fname" id="details-name">File</div><div class="fsub" id="details-kind">File</div></div>
+    </div>
+    <dl class="details-rows" id="details-rows"></dl>
+    <div class="details-actions">
+      <button class="btn btn-secondary btn-sm" id="details-view" type="button">View</button>
+      <button class="btn btn-secondary btn-sm" id="details-download" type="button">Download</button>
+      <button class="btn btn-danger btn-sm" id="details-delete" type="button">Delete</button>
+    </div>
+  </aside>
+
+  <script src="js/supabase-config.js" defer onerror="window.__CB_NO_CONFIG=1"></script>
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

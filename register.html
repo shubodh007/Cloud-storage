@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create account — CloudBox</title>
+  <meta name="description" content="Create a CloudBox account to store files in the cloud.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%232563EB'/%3E%3Cpath d='M7 15a3.5 3.5 0 01-.6-6.95A5 5 0 0116.2 9.6 3.2 3.2 0 0116.5 16H7z' fill='white'/%3E%3C/svg%3E">
+</head>
+<body>
+  <header class="topbar-landing">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html" style="color:inherit">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18a4 4 0 01-.7-7.94A5.5 5.5 0 0117.2 11.4 3.6 3.6 0 0117.5 18.5H7z"/></svg></span>
+        CloudBox
+      </a>
+      <nav class="nav-actions" aria-label="Primary">
+        <a class="btn btn-secondary btn-sm" href="login.html">Login</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="auth-wrap">
+    <div class="auth-card">
+      <h1>Create your account</h1>
+      <p class="lede">One account. Your files on any device.</p>
+      <div class="config-banner" role="status">Supabase isn’t connected yet. Copy <code>js/supabase-config.example.js</code> → <code>js/supabase-config.js</code> and add your project keys (see README).</div>
+      <form id="register-form" novalidate>
+        <div class="form-error" role="alert" aria-live="assertive"></div>
+        <div class="field">
+          <label for="name">Name</label>
+          <input class="input" id="name" name="name" type="text" autocomplete="name" placeholder="Shubodh" aria-describedby="name-err" required>
+          <div class="field-error" id="name-err" aria-live="polite"></div>
+        </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input class="input" id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" aria-describedby="email-err" required>
+          <div class="field-error" id="email-err" aria-live="polite"></div>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input class="input" id="password" name="password" type="password" autocomplete="new-password" placeholder="Minimum 6 characters" aria-describedby="password-err" required>
+          <div class="field-error" id="password-err" aria-live="polite"></div>
+        </div>
+        <button class="btn btn-primary" type="submit">Create Account</button>
+      </form>
+      <p class="auth-alt">Already have an account? <a href="login.html">Log in</a></p>
+    </div>
+  </main>
+
+  <script src="js/supabase-config.js" defer onerror="window.__CB_NO_CONFIG=1"></script>
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

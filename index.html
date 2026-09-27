@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudBox — Your files. Anywhere. Anytime.</title>
+  <meta name="description" content="CloudBox: securely store, manage, and access your files from anywhere through the cloud.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%232563EB'/%3E%3Cpath d='M7 15a3.5 3.5 0 01-.6-6.95A5 5 0 0116.2 9.6 3.2 3.2 0 0116.5 16H7z' fill='white'/%3E%3C/svg%3E">
+</head>
+<body>
+  <header class="topbar-landing">
+    <div class="topbar-inner">
+      <span class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 18a4 4 0 01-.7-7.94A5.5 5.5 0 0117.2 11.4 3.6 3.6 0 0117.5 18.5H7z"/></svg>
+        </span>
+        CloudBox
+      </span>
+      <nav class="nav-actions" aria-label="Primary">
+        <a class="btn btn-secondary btn-sm" href="login.html">Login</a>
+        <a class="btn btn-primary btn-sm" href="register.html">Get Started</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Cloud storage · Auth · Database</span>
+          <h1>Your files.<br>Anywhere. Anytime.</h1>
+          <p class="sub">Securely store, manage, and access your files from anywhere through the cloud.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href="register.html">Get Started</a>
+            <a class="btn btn-secondary" href="login.html">Login</a>
+          </div>
+          <p class="hero-meta">Private by default — RLS + storage policies isolate every user. <code>USER_ID/filename</code></p>
+        </div>
+        <div class="hero-preview" aria-hidden="true">
+          <div class="hero-preview-accent"></div>
+          <div class="hero-preview-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+          <div class="hero-preview-row"><span class="fname">resume.pdf</span><span class="fmeta">2.4 MB · Today</span></div>
+          <div class="hero-preview-row"><span class="fname">project_report.pdf</span><span class="fmeta">5.1 MB · Today</span></div>
+          <div class="hero-preview-row"><span class="fname">photo.jpg</span><span class="fmeta">1.8 MB · Yesterday</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature-strip" aria-label="What CloudBox demonstrates">
+      <div class="feature"><h3>Cloud Storage</h3><p>Files live in Supabase Storage under your user folder.</p></div>
+      <div class="feature"><h3>Cloud Database</h3><p>Names, sizes and paths tracked in PostgreSQL.</p></div>
+      <div class="feature"><h3>Access control</h3><p>Row Level Security + storage policies, not just UI checks.</p></div>
+      <div class="feature"><h3>Remote access</h3><p>Log in from any browser; your files follow you.</p></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>CloudBox — Cloud Computing project (HTML · CSS · JS · Supabase).</span>
+      <span>Storage bar assumes 1 GB app quota for demonstration.</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,101 @@
+/* CloudBox — landing + auth pages. Compact, flat, no AI slop. */
+.topbar-landing {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner {
+  max-width: 1080px; margin: 0 auto; padding: 12px 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 800; font-size: 17px; letter-spacing: -0.01em; }
+.brand-mark {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: var(--primary); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.brand-mark svg { width: 17px; height: 17px; }
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+
+/* Hero — restrained; single subtle accent panel (only gradient in product) */
+.hero-wrap { max-width: 1080px; margin: 0 auto; padding: 56px 20px 40px; }
+.hero-grid {
+  display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 32px; align-items: center;
+}
+.eyebrow {
+  display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--primary);
+  background: #EFF6FF; border: 1px solid #DBEAFE;
+  padding: 4px 10px; border-radius: 999px; margin-bottom: 14px;
+}
+.hero-grid h1 { font-size: 40px; line-height: 1.08; margin-bottom: 12px; }
+.hero-grid .sub { font-size: 16px; color: var(--text-2); max-width: 44ch; margin-bottom: 22px; }
+.hero-ctas { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.hero-meta { font-size: 13px; color: var(--text-2); }
+.hero-meta code { font-family: var(--mono); font-size: 12px; background: #F1F5F9; padding: 1px 6px; border-radius: 5px; }
+
+/* The one memorable-but-honest visual: a miniature of the real file table */
+.hero-preview {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; box-shadow: var(--shadow-sm); overflow: hidden;
+}
+.hero-preview-bar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  background: #F8FAFC;
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; background: #CBD5E1; }
+.hero-preview-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-bottom: 1px solid #F1F5F9; font-size: 13px;
+}
+.hero-preview-row:last-child { border-bottom: 0; }
+.hero-preview-row .fname { font-weight: 600; }
+.hero-preview-row .fmeta { margin-left: auto; color: var(--text-2); font-family: var(--mono); font-size: 11.5px; }
+.hero-preview-accent { height: 3px; background: linear-gradient(135deg, #2563EB, #4F46E5); }
+
+.feature-strip {
+  max-width: 1080px; margin: 0 auto; padding: 0 20px 56px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+}
+.feature {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 9px; padding: 14px;
+}
+.feature h3 { font-size: 13.5px; margin-bottom: 4px; }
+.feature p { font-size: 12.5px; color: var(--text-2); }
+
+/* Auth cards */
+.auth-wrap {
+  min-height: calc(100vh - 53px);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 48px 16px;
+}
+.auth-card {
+  width: min(420px, 100%);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; box-shadow: var(--shadow-sm);
+  padding: 26px 26px 22px;
+}
+.auth-card h1 { font-size: 22px; margin-bottom: 4px; }
+.auth-card .lede { font-size: 13.5px; color: var(--text-2); margin-bottom: 20px; }
+.auth-card .btn-primary { width: 100%; margin-top: 6px; }
+.auth-alt { text-align: center; font-size: 13.5px; color: var(--text-2); margin-top: 16px; }
+.auth-checklist { margin: 0 0 16px; padding: 0; list-style: none; font-size: 12.5px; color: var(--text-2); }
+.auth-checklist li { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+
+.footer { border-top: 1px solid var(--border); background: var(--surface); }
+.footer-inner {
+  max-width: 1080px; margin: 0 auto; padding: 16px 20px;
+  display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+  font-size: 12.5px; color: var(--text-2);
+}
+
+@media (max-width: 860px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-grid h1 { font-size: 32px; }
+  .feature-strip { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .feature-strip { grid-template-columns: 1fr; }
+  .hero-wrap { padding-top: 36px; }
+}
